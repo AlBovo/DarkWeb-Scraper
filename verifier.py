@@ -20,8 +20,7 @@ def verifyOnionUrl(url):
     except:
         pass
 
-if __name__ == "__main__":
+def verify():
     onion_list = getOnionList()
     for onion_url in tqdm.tqdm(onion_list, desc="Verifying URLs", unit="url"):
         verifyOnionUrl(onion_url)
-    print("Verification complete. Check 'onion-working.txt' for working URLs.")
