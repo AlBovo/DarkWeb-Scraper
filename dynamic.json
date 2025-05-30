@@ -18,5 +18,15 @@
         "url": "http://rhysidafc6lm7qa2mkiukbezh7zuth3i4wof4mh2audkymscjm6yegad.onion",
         "api": "/archive.php",
         "description": "the api retrieves all the items"
-    }
+    },
+    {
+        "url": "http://z6wkgghtoawog5noty5nxulmmt2zs7c3yvwr22v4czbffdoly2kl4uad.onion",
+        "api": "/?paged=",
+        "description": "the api retrieves the data based on the current month, to specifiy a different month, use m={year}{month}"
+    },
+    {
+        "url": "http://lynxblogxutufossaeawlij3j3uikaloll5ko6grzhkwdclrjngrfoid.onion",
+        "api": "/api/v1/blog/get/announcements?page={x}&perPage={y}",
+        "description": "the api retrieves {y} items in json format, starting from page {x}"
+    }   
 ]
