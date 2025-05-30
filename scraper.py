@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-import requests, tqdm
+import requests, tqdm, json
 
+global VERBOSE
 PROXIES = {
     'http':  'socks5h://localhost:9050',
     'https': 'socks5h://localhost:9050'
@@ -19,16 +20,28 @@ except:
 def static(to_find: str):
     to_find = to_find.lower()
     
-    with open('static.txt', 'r') as file:
-        urls = file.readlines()
-        urls = [url.strip() for url in urls if url.strip()]
-    
+    urls = json.load(open('onion-list.json', 'r'))
+
     for url in tqdm.tqdm(urls, desc="Processing URLs"):
         try:
-            res = session.get(url, timeout=20).text
+            res = session.get(url['url'], timeout=20).text
             if to_find in res.lower():
                 with open('static-results.txt', 'w') as output_file:
+                    if VERBOSE:
+                        print(f"Found '{to_find}' in {url['url']}")
                     output_file.write(f"Found '{to_find}' in {url}\n")
-            
+        except TimeoutError:
+            print(f"Connection to {url} timed out.")
+
+def dynamic(to_find: str):
+    to_find = to_find.lower()
+    
+    urls = json.load(open('onion-list.json', 'r'))
+
+    for url in tqdm.tqdm(urls, desc="Processing URLs"):
+        try:
+            u = url['url']
+            a = url['api']
+            # TODO
         except TimeoutError:
             print(f"Connection to {url} timed out.")

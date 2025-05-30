@@ -14,13 +14,13 @@ def getOnionList():
 def verifyOnionUrl(url):
     try:
         response = requests.get(url, proxies=PROXIES, timeout=10)
-        if response.status_code == 200:
-            with open('onion-working.txt', 'a') as output_file:
-                output_file.write(url + "\n")
+        return response.status_code == 200
     except:
         pass
 
-def verify():
-    onion_list = getOnionList()
+def verify(onion_list):
+    verified_urls = []
     for onion_url in tqdm.tqdm(onion_list, desc="Verifying URLs", unit="url"):
-        verifyOnionUrl(onion_url)
+        if verifyOnionUrl(onion_url):
+            verified_urls.append(onion_url)
+    return verified_urls
