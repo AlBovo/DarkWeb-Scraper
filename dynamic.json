@@ -1,0 +1,22 @@
+[
+    {
+        "url": "http://threeamkelxicjsaf2czjyz2lc4q3ngqkxhhlexyfcp2o6raw4rphyad.onion",
+        "api": "/api/show-more?start=",
+        "description": "the api retrieves 30 items starting from the given index, when no more items are available, it returns an empty page"
+    },
+    {
+        "url": "http://s7lmmhlt3iwnwirxvgjidl6omcblvw2rg75txjfduy73kx5brlmiulad.onion/api/search?company=&page=1",
+        "api": "/api/search?company=&page=",
+        "description": "the api retrieves 11 items in json format"
+    },
+    {
+        "url": "http://incbacg6bfwtrlzwdbqc55gsfl763s3twdtwhp27dzuik6s6rwdcityd.onion",
+        "api": "/api/v1/blog/get/announcements?page=1&perPage=",
+        "description": "the api retrieves {perPage} items in json format."
+    },
+    {
+        "url": "http://rhysidafc6lm7qa2mkiukbezh7zuth3i4wof4mh2audkymscjm6yegad.onion",
+        "api": "/archive.php",
+        "description": "the api retrieves all the items"
+    }
+]
