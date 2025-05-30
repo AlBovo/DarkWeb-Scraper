@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import requests, tqdm, json
 
-global VERBOSE
 PROXIES = {
     'http':  'socks5h://localhost:9050',
     'https': 'socks5h://localhost:9050'
@@ -10,19 +9,24 @@ PROXIES = {
 session = requests.Session()
 session.proxies = PROXIES
 
-# Test the connection to the Tor network
-try:
-    session.get('http://httpbin.org/ip')
-except:
-    print("Failed to connect to the Tor network. Ensure Tor is running and configured correctly. (sudo systemctl start tor)")
-    exit(1)
+def test_tor_connection():
+    """
+    Test the connection to the Tor network by making a request to a known URL.
+    If the request fails, it indicates that the Tor service is not running or not configured correctly.
+    """
+    try:
+        session.get('http://httpbin.org/ip')
+    except:
+        print("Failed to connect to the Tor network. Ensure Tor is running and configured correctly. (sudo systemctl start tor)")
+        exit(1)
 
-def save_status(file: str, status: str):
+def save_status(file: str, status: str, verbose: bool = False):
     with open(file, 'w') as output_file:
-        if VERBOSE: print(status)
+        if verbose: print(status)
         output_file.write(status + '\n')
 
-def static(to_find: str):
+def static(to_find: str, verbose: bool = False):
+    assert test_tor_connection(), "Tor connection failed. Ensure Tor is running and configured correctly."
     to_find = to_find.lower()
     
     urls = json.load(open('static.json', 'r'))
@@ -30,11 +34,12 @@ def static(to_find: str):
     for url in tqdm.tqdm(urls, desc="Processing URLs"):
         try:
             res = session.get(url['url'], timeout=20).text
-            if to_find in res.lower(): save_status('static-results.txt', f"Found '{to_find}' in {url['url']}")
-        except TimeoutError:
-            print(f"Connection to {url} timed out.")
+            if to_find in res.lower(): save_status('static-results.txt', f"Found '{to_find}' in {url['url']}", verbose)
+        except:
+            print(f"Connection to {url['url']} timed out.")
 
-def dynamic(to_find: str):
+def dynamic(to_find: str, verbose: bool = False):
+    assert test_tor_connection(), "Tor connection failed. Ensure Tor is running and configured correctly."
     to_find = to_find.lower()
     
     urls = json.load(open('dynamic.json', 'r'))
@@ -59,7 +64,7 @@ def dynamic(to_find: str):
                     except:
                         break
                     if to_find in res.lower(): 
-                        save_status('dynamic-results.txt', f"Found '{to_find}' in {u + atemp}")
+                        save_status('dynamic-results.txt', f"Found '{to_find}' in {u + atemp}", verbose)
                     e += 30
             elif i == 1 or i == 4 or i == 5:
                 e = 0
@@ -67,18 +72,19 @@ def dynamic(to_find: str):
                     atemp = a.format(e)
                     try:
                         res = session.get(u + atemp, timeout=20).text
+                        print(res)
                         if 'end":true' in res or 'Nothing here' in res:
                             break
                     except:
                         break
                     if to_find in res.lower():
-                        save_status('dynamic-results.txt', f"Found '{to_find}' in {u + atemp}")
+                        save_status('dynamic-results.txt', f"Found '{to_find}' in {u + atemp}", verbose)
                     e += 1
             elif i == 2 or i == 3:
                 try:
                     res = session.get(u + a, timeout=20).text
                     if to_find in res.lower():
-                        save_status('dynamic-results.txt', f"Found '{to_find}' in {u + a}")
+                        save_status('dynamic-results.txt', f"Found '{to_find}' in {u + a}", verbose)
                 except:
                     continue
             else:

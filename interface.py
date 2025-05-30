@@ -21,19 +21,17 @@ assert sum([args.static, args.dynamic, args.all]) == 1, "You must specify exactl
 
 if args.verbose:
     print("Verbose mode enabled. All output will be printed to the console.")
-    global VERBOSE
-    VERBOSE = True
 
 if args.verify:
     verifyOnionUrls()
     print("Verification complete. Check 'onion-working.txt' for working URLs.")
 elif args.static:
     from scraper import static
-    static(args.keyword)
+    static(args.keyword.lower(), args.verbose)
 elif args.dynamic:
     from scraper import dynamic
-    dynamic(args.keyword)
+    dynamic(args.keyword.lower(), args.verbose)
 elif args.all:
     from scraper import dynamic, static
-    static(args.keyword)
-    dynamic(args.keyword)
+    static(args.keyword.lower(), args.verbose)
+    dynamic(args.keyword.lower(), args.verbose)
