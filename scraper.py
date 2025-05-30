@@ -26,7 +26,7 @@ def save_status(file: str, status: str, verbose: bool = False):
         output_file.write(status + '\n')
 
 def static(to_find: str, verbose: bool = False):
-    assert test_tor_connection(), "Tor connection failed. Ensure Tor is running and configured correctly."
+    test_tor_connection()
     to_find = to_find.lower()
     
     urls = json.load(open('static.json', 'r'))
@@ -39,7 +39,7 @@ def static(to_find: str, verbose: bool = False):
             print(f"Connection to {url['url']} timed out.")
 
 def dynamic(to_find: str, verbose: bool = False):
-    assert test_tor_connection(), "Tor connection failed. Ensure Tor is running and configured correctly."
+    test_tor_connection()
     to_find = to_find.lower()
     
     urls = json.load(open('dynamic.json', 'r'))
