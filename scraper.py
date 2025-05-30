@@ -72,7 +72,6 @@ def dynamic(to_find: str, verbose: bool = False):
                     atemp = a.format(e)
                     try:
                         res = session.get(u + atemp, timeout=20).text
-                        print(res)
                         if 'end":true' in res or 'Nothing here' in res:
                             break
                     except:
