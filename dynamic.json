@@ -1,32 +1,38 @@
 [
     {
         "url": "http://threeamkelxicjsaf2czjyz2lc4q3ngqkxhhlexyfcp2o6raw4rphyad.onion",
-        "api": "/api/show-more?start=",
-        "description": "the api retrieves 30 items starting from the given index, when no more items are available, it returns an empty page"
+        "api": "/api/show-more?start={}",
+        "description": "the api retrieves 30 items starting from the given index, when no more items are available, it returns an empty page",
+        "captcha": true
     },
     {
-        "url": "http://s7lmmhlt3iwnwirxvgjidl6omcblvw2rg75txjfduy73kx5brlmiulad.onion/api/search?company=&page=1",
-        "api": "/api/search?company=&page=",
-        "description": "the api retrieves 11 items in json format"
+        "url": "http://s7lmmhlt3iwnwirxvgjidl6omcblvw2rg75txjfduy73kx5brlmiulad.onion",
+        "api": "/api/search?company=&page={}",
+        "description": "the api retrieves 11 items in json format",
+        "captcha": true
     },
     {
         "url": "http://incbacg6bfwtrlzwdbqc55gsfl763s3twdtwhp27dzuik6s6rwdcityd.onion",
-        "api": "/api/v1/blog/get/announcements?page=1&perPage=",
-        "description": "the api retrieves {perPage} items in json format."
+        "api": "/api/v1/blog/get/announcements?page=0&perPage=1000000000",
+        "description": "the api retrieves {perPage} items in json format.",
+        "captcha": false
     },
     {
         "url": "http://rhysidafc6lm7qa2mkiukbezh7zuth3i4wof4mh2audkymscjm6yegad.onion",
         "api": "/archive.php",
-        "description": "the api retrieves all the items"
+        "description": "the api retrieves all the items",
+        "captcha": false
     },
     {
         "url": "http://z6wkgghtoawog5noty5nxulmmt2zs7c3yvwr22v4czbffdoly2kl4uad.onion",
-        "api": "/?paged=",
-        "description": "the api retrieves the data based on the current month, to specifiy a different month, use m={year}{month}"
+        "api": "/?paged={}",
+        "description": "the api retrieves the data based on the current month, to specifiy a different month, use m={year}{month}",
+        "captcha": false
     },
     {
         "url": "http://lynxblogxutufossaeawlij3j3uikaloll5ko6grzhkwdclrjngrfoid.onion",
-        "api": "/api/v1/blog/get/announcements?page={x}&perPage={y}",
-        "description": "the api retrieves {y} items in json format, starting from page {x}"
+        "api": "/api/v1/blog/get/announcements?page=0&perPage=1000000000",
+        "description": "the api retrieves {y} items in json format, starting from page {x}",
+        "captcha": false
     }   
 ]

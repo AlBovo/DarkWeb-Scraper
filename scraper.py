@@ -17,31 +17,71 @@ except:
     print("Failed to connect to the Tor network. Ensure Tor is running and configured correctly. (sudo systemctl start tor)")
     exit(1)
 
+def save_status(file: str, status: str):
+    with open(file, 'w') as output_file:
+        if VERBOSE: print(status)
+        output_file.write(status + '\n')
+
 def static(to_find: str):
     to_find = to_find.lower()
     
-    urls = json.load(open('onion-list.json', 'r'))
+    urls = json.load(open('static.json', 'r'))
 
     for url in tqdm.tqdm(urls, desc="Processing URLs"):
         try:
             res = session.get(url['url'], timeout=20).text
-            if to_find in res.lower():
-                with open('static-results.txt', 'w') as output_file:
-                    if VERBOSE:
-                        print(f"Found '{to_find}' in {url['url']}")
-                    output_file.write(f"Found '{to_find}' in {url}\n")
+            if to_find in res.lower(): save_status('static-results.txt', f"Found '{to_find}' in {url['url']}")
         except TimeoutError:
             print(f"Connection to {url} timed out.")
 
 def dynamic(to_find: str):
     to_find = to_find.lower()
     
-    urls = json.load(open('onion-list.json', 'r'))
+    urls = json.load(open('dynamic.json', 'r'))
 
-    for url in tqdm.tqdm(urls, desc="Processing URLs"):
+    # TODO: Implement modular dynamic URL handling
+    for i, url in enumerate(tqdm.tqdm(urls, desc="Processing URLs")):
         try:
+            if url['captcha']:
+                print(f"Skipping {url['url']} due to captcha requirement.")
+                continue
             u = url['url']
             a = url['api']
-            # TODO
+
+            if i == 0:
+                e = 0
+                while True:
+                    atemp = a.format(e)
+                    try:
+                        res = session.get(u + atemp, timeout=20).text
+                        if "PUBLISHED" not in res:
+                            break
+                    except:
+                        break
+                    if to_find in res.lower(): 
+                        save_status('dynamic-results.txt', f"Found '{to_find}' in {u + atemp}")
+                    e += 30
+            elif i == 1 or i == 4 or i == 5:
+                e = 0
+                while True:
+                    atemp = a.format(e)
+                    try:
+                        res = session.get(u + atemp, timeout=20).text
+                        if 'end":true' in res or 'Nothing here' in res:
+                            break
+                    except:
+                        break
+                    if to_find in res.lower():
+                        save_status('dynamic-results.txt', f"Found '{to_find}' in {u + atemp}")
+                    e += 1
+            elif i == 2 or i == 3:
+                try:
+                    res = session.get(u + a, timeout=20).text
+                    if to_find in res.lower():
+                        save_status('dynamic-results.txt', f"Found '{to_find}' in {u + a}")
+                except:
+                    continue
+            else:
+                assert False, "Unexpected index in dynamic URLs"
         except TimeoutError:
             print(f"Connection to {url} timed out.")
